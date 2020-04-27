@@ -33,6 +33,7 @@ class MessageListView extends StatefulWidget {
   final BoxConstraints constraints;
   final List<Widget> Function(ChatMessage) messageButtonsBuilder;
   final bool messageDirectionForceLeft;
+  final bool expandList;
 
   MessageListView({
     this.showLoadEarlierWidget,
@@ -68,6 +69,7 @@ class MessageListView extends StatefulWidget {
     this.showLoadMore,
     this.messageButtonsBuilder,
     this.messageDirectionForceLeft,
+    this.expandList,
   });
 
   @override
@@ -100,6 +102,10 @@ class _MessageListViewState extends State<MessageListView> {
     return true;
   }
 
+  Widget _buildRoot(Widget child) {
+    return widget.expandList ? Expanded(child: child) : Flexible(child: child);
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime currentDate;
@@ -109,8 +115,8 @@ class _MessageListViewState extends State<MessageListView> {
             maxHeight: MediaQuery.of(context).size.height,
             maxWidth: MediaQuery.of(context).size.width);
 
-    return Flexible(
-      child: GestureDetector(
+    return _buildRoot(
+      GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Padding(
           padding: widget.messageContainerPadding,

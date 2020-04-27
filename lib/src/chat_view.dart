@@ -240,6 +240,9 @@ class DashChat extends StatefulWidget {
   /// メッセージを強制的に左側に表示する
   final bool messageDirectionForceLeft;
 
+  /// リストを広げるか
+  final bool expandList;
+
   DashChat({
     Key key,
     this.inputTextDirection = TextDirection.ltr,
@@ -307,6 +310,7 @@ class DashChat extends StatefulWidget {
     this.showTraillingBeforeSend = true,
     this.messageButtonsBuilder,
     this.messageDirectionForceLeft = false,
+    this.expandList = false,
   }) : super(key: key);
 
   String getVal() {
@@ -477,6 +481,7 @@ class DashChatState extends State<DashChat> {
                 showLoadMore: showLoadMore,
                 messageButtonsBuilder: widget.messageButtonsBuilder,
                 messageDirectionForceLeft: widget.messageDirectionForceLeft,
+                expandList: widget.expandList,
               ),
               if (widget.messages.length != 0 &&
                   widget.messages[widget.messages.length - 1].user.uid !=
