@@ -243,6 +243,9 @@ class DashChat extends StatefulWidget {
   /// リストを広げるか
   final bool expandList;
 
+  /// アバターを上寄せにするか
+  final bool avatarAlignTop;
+
   DashChat({
     Key key,
     this.inputTextDirection = TextDirection.ltr,
@@ -311,6 +314,7 @@ class DashChat extends StatefulWidget {
     this.messageButtonsBuilder,
     this.messageDirectionForceLeft = false,
     this.expandList = false,
+    this.avatarAlignTop = false,
   }) : super(key: key);
 
   String getVal() {
@@ -482,6 +486,7 @@ class DashChatState extends State<DashChat> {
                 messageButtonsBuilder: widget.messageButtonsBuilder,
                 messageDirectionForceLeft: widget.messageDirectionForceLeft,
                 expandList: widget.expandList,
+                avatarAlignTop: widget.avatarAlignTop,
               ),
               if (widget.messages.length != 0 &&
                   widget.messages[widget.messages.length - 1].user.uid !=
