@@ -32,6 +32,7 @@ class MessageListView extends StatefulWidget {
   final Function(bool) defaultLoadCallback;
   final BoxConstraints constraints;
   final List<Widget> Function(ChatMessage) messageButtonsBuilder;
+  final bool messageDirectionForceLeft;
 
   MessageListView({
     this.showLoadEarlierWidget,
@@ -65,7 +66,8 @@ class MessageListView extends StatefulWidget {
     this.changeVisible,
     this.visible,
     this.showLoadMore,
-    this.messageButtonsBuilder
+    this.messageButtonsBuilder,
+    this.messageDirectionForceLeft,
   });
 
   @override
@@ -206,8 +208,9 @@ class _MessageListViewState extends State<MessageListView> {
                                   ),
                                   child: ((widget.showAvatarForEverMessage ||
                                               showAvatar) &&
-                                          widget.messages[i].user.uid !=
-                                              widget.user.uid)
+                                          (widget.messages[i].user.uid !=
+                                                  widget.user.uid ||
+                                              widget.messageDirectionForceLeft))
                                       ? AvatarContainer(
                                           user: widget.messages[i].user,
                                           onPress: widget.onPressAvatar,
@@ -260,11 +263,13 @@ class _MessageListViewState extends State<MessageListView> {
                                         ? widget
                                             .messageBuilder(widget.messages[i])
                                         : Align(
-                                            alignment:
-                                                widget.messages[i].user.uid ==
-                                                        widget.user.uid
-                                                    ? Alignment.centerRight
-                                                    : Alignment.centerLeft,
+                                            alignment: widget.messages[i].user
+                                                            .uid ==
+                                                        widget.user.uid &&
+                                                    !widget
+                                                        .messageDirectionForceLeft
+                                                ? Alignment.centerRight
+                                                : Alignment.centerLeft,
                                             child: MessageContainer(
                                               constraints: constraints,
                                               isUser:
@@ -282,8 +287,10 @@ class _MessageListViewState extends State<MessageListView> {
                                                   .messageContainerDecoration,
                                               parsePatterns:
                                                   widget.parsePatterns,
-                                              buttons: widget.messages[i].buttons,
-                                              messageButtonsBuilder: widget.messageButtonsBuilder,
+                                              buttons:
+                                                  widget.messages[i].buttons,
+                                              messageButtonsBuilder:
+                                                  widget.messageButtonsBuilder,
                                             ),
                                           ),
                                   ),
@@ -295,8 +302,10 @@ class _MessageListViewState extends State<MessageListView> {
                                     ),
                                     child: ((widget.showAvatarForEverMessage ||
                                                 showAvatar) &&
-                                            widget.messages[i].user.uid ==
-                                                widget.user.uid)
+                                            (widget.messages[i].user.uid ==
+                                                    widget.user.uid &&
+                                                !widget
+                                                    .messageDirectionForceLeft))
                                         ? AvatarContainer(
                                             user: widget.messages[i].user,
                                             onPress: widget.onPressAvatar,
