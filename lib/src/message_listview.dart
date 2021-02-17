@@ -35,6 +35,7 @@ class MessageListView extends StatefulWidget {
   final bool messageDirectionForceLeft;
   final bool expandList;
   final bool avatarAlignTop;
+  final List<Widget> Function(ChatMessage) bottomButtonsBuilder;
 
   MessageListView({
     this.showLoadEarlierWidget,
@@ -72,6 +73,7 @@ class MessageListView extends StatefulWidget {
     this.messageDirectionForceLeft,
     this.expandList,
     this.avatarAlignTop,
+    this.bottomButtonsBuilder,
   });
 
   @override
@@ -301,6 +303,8 @@ class _MessageListViewState extends State<MessageListView> {
                                                   widget.messages[i].buttons,
                                               messageButtonsBuilder:
                                                   widget.messageButtonsBuilder,
+                                              bottomButtonsBuilder:
+                                                  widget.bottomButtonsBuilder,
                                             ),
                                           ),
                                   ),

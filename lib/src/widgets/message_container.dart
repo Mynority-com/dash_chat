@@ -52,6 +52,11 @@ class MessageContainer extends StatelessWidget {
   /// Constraint to use to build the message layout
   final BoxConstraints constraints;
 
+  /// [bottomButtonsBuilder] function takes a function with this
+  /// structure [List<Widget> Function()] to render the buttons
+  /// below the message container
+  final List<Widget> Function(ChatMessage) bottomButtonsBuilder;
+
   const MessageContainer({
     @required this.message,
     @required this.timeFormat,
@@ -63,7 +68,8 @@ class MessageContainer extends StatelessWidget {
     this.parsePatterns = const <MatchText>[],
     this.isUser,
     this.messageButtonsBuilder,
-    this.buttons
+    this.buttons,
+    this.bottomButtonsBuilder
   });
 
   @override
@@ -76,91 +82,103 @@ class MessageContainer extends StatelessWidget {
       constraints: BoxConstraints(
         maxWidth: constraints.maxWidth * 0.8,
       ),
-      child: Container(
-        decoration: messageContainerDecoration != null
-            ? messageContainerDecoration.copyWith(
-                color: message.user.containerColor != null
-                    ? message.user.containerColor
-                    : messageContainerDecoration.color,
-              )
-            : BoxDecoration(
-                color: message.user.containerColor != null
-                    ? message.user.containerColor
-                    : isUser
-                        ? Theme.of(context).accentColor
-                        : Color.fromRGBO(225, 225, 225, 1),
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-        margin: EdgeInsets.only(
-          bottom: 5.0,
-        ),
-        padding: EdgeInsets.all(8.0),
+      child: IntrinsicWidth (
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            if (messageTextBuilder != null)
-              messageTextBuilder(message.text, message)
-            else
-              ParsedText(
-                parse: parsePatterns,
-                text: message.text,
-                style: TextStyle(
-                  color: message.user.color != null
-                      ? message.user.color
-                      : isUser ? Colors.white70 : Colors.black87,
-                ),
+          children: [
+            Container(
+              decoration: messageContainerDecoration != null
+                  ? messageContainerDecoration.copyWith(
+                      color: message.user.containerColor != null
+                          ? message.user.containerColor
+                          : messageContainerDecoration.color,
+                    )
+                  : BoxDecoration(
+                      color: message.user.containerColor != null
+                          ? message.user.containerColor
+                          : isUser
+                              ? Theme.of(context).accentColor
+                              : Color.fromRGBO(225, 225, 225, 1),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+              margin: EdgeInsets.only(
+                bottom: 5.0,
               ),
-            if (message.image != null)
-              if (messageImageBuilder != null)
-                messageImageBuilder(message.image, message)
-              else
-                Padding(
-                  padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                  child: FadeInImage.memoryNetwork(
-                    height: constraints.maxHeight * 0.3,
-                    width: constraints.maxWidth * 0.7,
-                    fit: BoxFit.contain,
-                    placeholder: kTransparentImage,
-                    image: message.image,
-                  ),
-                ),
-            if(buttons != null)
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  if (messageTextBuilder != null)
+                    messageTextBuilder(message.text, message)
+                  else
+                    ParsedText(
+                      parse: parsePatterns,
+                      text: message.text,
+                      style: TextStyle(
+                        color: message.user.color != null
+                            ? message.user.color
+                            : isUser ? Colors.white70 : Colors.black87,
+                      ),
+                    ),
+                  if (message.image != null)
+                    if (messageImageBuilder != null)
+                      messageImageBuilder(message.image, message)
+                    else
+                      Padding(
+                        padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        child: FadeInImage.memoryNetwork(
+                          height: constraints.maxHeight * 0.3,
+                          width: constraints.maxWidth * 0.7,
+                          fit: BoxFit.contain,
+                          placeholder: kTransparentImage,
+                          image: message.image,
+                        ),
+                      ),
+                  if(buttons != null)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: buttons,
+                    )
+                  else if(messageButtonsBuilder != null)
+                    Row(crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: messageButtonsBuilder(message),
+                    ),
+                  if (messageTimeBuilder != null)
+                    messageTimeBuilder(
+                      timeFormat != null
+                          ? timeFormat.format(message.createdAt)
+                          : DateFormat('HH:mm:ss').format(message.createdAt),
+                      message,
+                    )
+                  else
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.0),
+                      child: Text(
+                        timeFormat != null
+                            ? timeFormat.format(message.createdAt)
+                            : DateFormat('HH:mm:ss').format(message.createdAt),
+                        style: TextStyle(
+                          fontSize: 10.0,
+                          color: message.user.color != null
+                              ? message.user.color
+                              : isUser ? Colors.white70 : Colors.black87,
+                        ),
+                      ),
+                    )
+                ],
+              )
+            ),
+            if(bottomButtonsBuilder != null)
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: buttons,
-              )
-            else if(messageButtonsBuilder != null)
-              Row(crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: messageButtonsBuilder(message),
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: bottomButtonsBuilder(message),
               ),
-            if (messageTimeBuilder != null)
-              messageTimeBuilder(
-                timeFormat != null
-                    ? timeFormat.format(message.createdAt)
-                    : DateFormat('HH:mm:ss').format(message.createdAt),
-                message,
-              )
-            else
-              Padding(
-                padding: EdgeInsets.only(top: 5.0),
-                child: Text(
-                  timeFormat != null
-                      ? timeFormat.format(message.createdAt)
-                      : DateFormat('HH:mm:ss').format(message.createdAt),
-                  style: TextStyle(
-                    fontSize: 10.0,
-                    color: message.user.color != null
-                        ? message.user.color
-                        : isUser ? Colors.white70 : Colors.black87,
-                  ),
-                ),
-              )
-          ],
+            SizedBox(height: 20,)
+          ]
         ),
-      ),
+      )
     );
   }
 }

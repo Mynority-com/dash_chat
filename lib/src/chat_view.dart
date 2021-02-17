@@ -237,6 +237,11 @@ class DashChat extends StatefulWidget {
   /// a row.
   final List<Widget> Function(ChatMessage) messageButtonsBuilder;
 
+  /// [bottomButtonsBuilder] function takes a function with this
+  /// structure [List<Widget> Function()] to render the buttons
+  /// below the message container
+  final List<Widget> Function(ChatMessage) bottomButtonsBuilder;
+
   /// メッセージを強制的に左側に表示する
   final bool messageDirectionForceLeft;
 
@@ -318,6 +323,7 @@ class DashChat extends StatefulWidget {
     this.messageTimeBuilder,
     this.showTraillingBeforeSend = true,
     this.messageButtonsBuilder,
+    this.bottomButtonsBuilder,
     this.messageDirectionForceLeft = false,
     this.expandList = false,
     this.avatarAlignTop = false,
@@ -492,6 +498,7 @@ class DashChatState extends State<DashChat> {
                 visible: visible,
                 showLoadMore: showLoadMore,
                 messageButtonsBuilder: widget.messageButtonsBuilder,
+                bottomButtonsBuilder: widget.bottomButtonsBuilder,
                 messageDirectionForceLeft: widget.messageDirectionForceLeft,
                 expandList: widget.expandList,
                 avatarAlignTop: widget.avatarAlignTop,
