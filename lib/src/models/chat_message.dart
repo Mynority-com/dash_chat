@@ -41,6 +41,9 @@ class ChatMessage {
   /// actions in message container.
   List<Widget> buttons;
 
+  /// the comment id to which this comment reply.
+  String replyTo;
+
   ChatMessage({
     String id,
     @required this.text,
@@ -51,7 +54,8 @@ class ChatMessage {
     String Function() messageIdGenerator,
     DateTime createdAt,
     this.customProperties,
-    this.buttons
+    this.buttons,
+    this.replyTo,
   }) {
     this.createdAt = createdAt != null ? createdAt : DateTime.now();
     this.id = id != null
@@ -72,6 +76,7 @@ class ChatMessage {
         ? QuickReplies.fromJson(json['quickReplies'])
         : null;
     customProperties = json['customProperties'] as Map<String, dynamic>;
+    replyTo = json['replyTo'];
   }
 
   Map<String, dynamic> toJson() {
@@ -86,6 +91,7 @@ class ChatMessage {
       data['user'] = user.toJson();
       data['quickReplies'] = quickReplies?.toJson();
       data['customProperties'] = this.customProperties;
+      data['replyTo'] = this.replyTo;
     } catch (e, stack) {
       print('ERROR caught when trying to convert ChatMessage to JSON:');
       print(e);

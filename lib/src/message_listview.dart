@@ -204,6 +204,7 @@ class _MessageListViewState extends State<MessageListView> {
                             padding: EdgeInsets.only(
                               top: first ? 10.0 : 0.0,
                               bottom: last ? 10.0 : 0.0,
+                              left: (widget.messages[i].replyTo != "") ? constraints.maxWidth * 0.1 : 0.0,
                             ),
                             child: Row(
                               mainAxisAlignment:
