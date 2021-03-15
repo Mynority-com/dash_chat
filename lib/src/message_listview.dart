@@ -36,6 +36,7 @@ class MessageListView extends StatefulWidget {
   final bool expandList;
   final bool avatarAlignTop;
   final List<Widget> Function(ChatMessage) bottomButtonsBuilder;
+  final bool isScrollable;
 
   MessageListView({
     this.showLoadEarlierWidget,
@@ -74,6 +75,7 @@ class MessageListView extends StatefulWidget {
     this.expandList,
     this.avatarAlignTop,
     this.bottomButtonsBuilder,
+    this.isScrollable,
   });
 
   @override
@@ -130,6 +132,7 @@ class _MessageListViewState extends State<MessageListView> {
               alignment: AlignmentDirectional.topCenter,
               children: [
                 ListView.builder(
+                  physics: widget.isScrollable ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
                   controller: widget.scrollController,
                   shrinkWrap: true,
                   reverse: widget.inverted,

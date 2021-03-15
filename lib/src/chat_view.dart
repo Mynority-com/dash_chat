@@ -257,6 +257,9 @@ class DashChat extends StatefulWidget {
   /// 入力バーの下にウィジェットを生成する
   final Widget Function() inputToolbarFooterBuilder;
 
+  // Scroll可能か否か
+  final bool isScrollable;
+
   DashChat({
     Key key,
     this.inputTextDirection = TextDirection.ltr,
@@ -329,6 +332,7 @@ class DashChat extends StatefulWidget {
     this.avatarAlignTop = false,
     this.showInputToolbar = true,
     this.inputToolbarFooterBuilder,
+    this.isScrollable,
   }) : super(key: key);
 
   String getVal() {
@@ -502,6 +506,7 @@ class DashChatState extends State<DashChat> {
                 messageDirectionForceLeft: widget.messageDirectionForceLeft,
                 expandList: widget.expandList,
                 avatarAlignTop: widget.avatarAlignTop,
+                isScrollable: widget.isScrollable,
               ),
               if (widget.messages.length != 0 &&
                   widget.messages[widget.messages.length - 1].user.uid !=
