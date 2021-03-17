@@ -260,6 +260,9 @@ class DashChat extends StatefulWidget {
   // Scroll可能か否か
   final bool isScrollable;
 
+  // MessageListViewだけ表示するか
+  final bool isOnlyMessageListView;
+
   DashChat({
     Key key,
     this.inputTextDirection = TextDirection.ltr,
@@ -333,6 +336,7 @@ class DashChat extends StatefulWidget {
     this.showInputToolbar = true,
     this.inputToolbarFooterBuilder,
     this.isScrollable,
+    this.isOnlyMessageListView = false,
   }) : super(key: key);
 
   String getVal() {
@@ -464,6 +468,46 @@ class DashChatState extends State<DashChat> {
         final maxHeight = constraints.maxWidth == double.infinity
             ? MediaQuery.of(context).size.height
             : constraints.maxHeight;
+
+        if(widget.isOnlyMessageListView) return MessageListView(
+            constraints: constraints,
+            shouldShowLoadEarlier: widget.shouldShowLoadEarlier,
+            showLoadEarlierWidget: widget.showLoadEarlierWidget,
+            onLoadEarlier: widget.onLoadEarlier,
+            defaultLoadCallback: changeDefaultLoadMore,
+            messageContainerPadding: widget.messageContainerPadding,
+            scrollController: widget.scrollController != null
+                ? widget.scrollController
+                : scrollController,
+            user: widget.user,
+            messages: widget.messages,
+            showuserAvatar: widget.showUserAvatar,
+            dateFormat: widget.dateFormat,
+            timeFormat: widget.timeFormat,
+            inverted: widget.inverted,
+            showAvatarForEverMessage: widget.showAvatarForEveryMessage,
+            onLongPressAvatar: widget.onLongPressAvatar,
+            onPressAvatar: widget.onPressAvatar,
+            onLongPressMessage: widget.onLongPressMessage,
+            avatarBuilder: widget.avatarBuilder,
+            messageBuilder: widget.messageBuilder,
+            messageTextBuilder: widget.messageTextBuilder,
+            messageImageBuilder: widget.messageImageBuilder,
+            messageTimeBuilder: widget.messageTimeBuilder,
+            dateBuilder: widget.dateBuilder,
+            messageContainerDecoration: widget.messageContainerDecoration,
+            parsePatterns: widget.parsePatterns,
+            changeVisible: changeVisible,
+            visible: visible,
+            showLoadMore: showLoadMore,
+            messageButtonsBuilder: widget.messageButtonsBuilder,
+            bottomButtonsBuilder: widget.bottomButtonsBuilder,
+            messageDirectionForceLeft: widget.messageDirectionForceLeft,
+            expandList: widget.expandList,
+            avatarAlignTop: widget.avatarAlignTop,
+            isScrollable: widget.isScrollable,
+          );
+
         return Container(
           height: widget.height != null ? widget.height : maxHeight,
           width: widget.width != null ? widget.width : maxWidth,
