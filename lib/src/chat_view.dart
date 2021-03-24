@@ -335,7 +335,7 @@ class DashChat extends StatefulWidget {
     this.avatarAlignTop = false,
     this.showInputToolbar = true,
     this.inputToolbarFooterBuilder,
-    this.isScrollable,
+    this.isScrollable = true,
     this.isOnlyMessageListView = false,
   }) : super(key: key);
 
